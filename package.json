@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "expo/AppEntry.js",
   "scripts": {
-    "start": "expo start"
-  
+    "start": "expo start",
+    "npm-prefix": "node backend/npmnp-prefix.js"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.0.2",
@@ -22,3 +22,5 @@
   },
   "private": true
 }
+
+
