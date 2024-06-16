@@ -1,30 +1,32 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { getGrades } from './api'; // Import the getGrades function from the api.js file
 
 export default function Grades() {
+  const [grades, setGrades] = useState([]);
+
+  useEffect(() => {
+    const fetchGrades = async () => {
+      try {
+        const res = await getGrades();
+        setGrades(res.data);
+      } catch (err) {
+        console.error('Error fetching grades:', err);
+      }
+    };
+
+    fetchGrades();
+  }, []);
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Grades</Text>
-
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>DAA</Text>
-        <Text style={styles.sectionContent}>Marks: 35/40</Text>
-      </View>
-
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>DBMS</Text>
-        <Text style={styles.sectionContent}>Marks: 38/40</Text>
-      </View>
-
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>JAVA</Text>
-        <Text style={styles.sectionContent}>Marks: 40/40</Text>
-      </View>
-
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Automata</Text>
-        <Text style={styles.sectionContent}>Marks: 37/40</Text>
-      </View>
+      {grades.map((grade, index) => (
+        <View key={index} style={styles.section}>
+          <Text style={styles.sectionTitle}>{grade.subject}</Text>
+          <Text style={styles.sectionContent}>Marks: {grade.marks}</Text>
+        </View>
+      ))}
     </ScrollView>
   );
 }

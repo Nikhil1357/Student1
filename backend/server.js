@@ -17,7 +17,7 @@ app.get('/', (req, res) => res.send('API Running'));
 // Define Routes
 app.use('/api/users', require('./routes/users'));
 app.use('/api/grades', require('./routes/grades'));
-app.use('/api/announcements', require('./routes/announcements'));
+app.use('/api/announcements', require('./routes/announcement'));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
