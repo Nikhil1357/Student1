@@ -1,63 +1,94 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
-import { getGrades } from './api'; // Import the getGrades function from the api.js file
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, TextInput, Button, Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { login } from './api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { FontAwesome } from '@expo/vector-icons'; // Import FontAwesome icon library
 
-export default function Grades() {
-  const [grades, setGrades] = useState([]);
+export default function Login() {
+  const [email, setEmail] = useState('test@example.com'); // Default email for testing
+  const [password, setPassword] = useState('password123'); // Default password for testing
+  const navigation = useNavigation();
 
-  useEffect(() => {
-    const fetchGrades = async () => {
-      try {
-        const res = await getGrades();
-        setGrades(res.data);
-      } catch (err) {
-        console.error('Error fetching grades:', err);
+  const handleLogin = async () => {
+    try {
+      console.log('Logging in with:', email, password); // Log email and password
+      const res = await login(email, password);
+      console.log('Login response:', res); // Log the response from the API
+      if (res.token) {
+        await AsyncStorage.setItem('userToken', res.token);
+        console.log('Login successful. Token saved:', res.token); // Log the saved token
+        Alert.alert('Notice', 'Login Successful!', [{
+          text: 'Close',
+          onPress: () => navigation.navigate('Main'),
+        }]);
+      } else {
+        Alert.alert('Notice', 'Invalid Login!', [{ text: 'Close' }]);
       }
-    };
-
-    fetchGrades();
-  }, []);
+    } catch (err) {
+      console.error('Login error:', err.response || err.message);
+      Alert.alert('Notice', 'Login Failed!', [{ text: 'Close' }]);
+    }
+  };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Grades</Text>
-      {grades.map((grade, index) => (
-        <View key={index} style={styles.section}>
-          <Text style={styles.sectionTitle}>{grade.subject}</Text>
-          <Text style={styles.sectionContent}>Marks: {grade.marks}</Text>
-        </View>
-      ))}
-    </ScrollView>
+    <View style={styles.container}>
+      <Text style={styles.title}>Login Page</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
+        keyboardType="email-address"
+        autoCapitalize="none"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+        autoCapitalize="none"
+      />
+      <Button title="Login" onPress={handleLogin} />
+      <View style={styles.footer}>
+        <FontAwesome name="user" size={24} color="#fff" /> {/* User icon */}
+        <Text style={styles.subjectMarks}>DAA: 40 | ACD: 40 | JAVA: 40 | DBMS: 40</Text>
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
-    backgroundColor: '#fff',
+    flex: 1,
+    backgroundColor: '#462cb0', // Theme color
+    alignItems: 'center',
+    justifyContent: 'center',
     padding: 16,
   },
   title: {
     fontSize: 24,
     marginBottom: 20,
-    textAlign: 'center',
-    color: '#462cb0', // Purple color for title
+    color: '#fff', // Text color
   },
-  section: {
-    marginBottom: 20,
-    padding: 16,
-    backgroundColor: '#462cb0', // Light purple background
-    borderRadius: 5,
+  input: {
+    width: '100%',
+    padding: 10,
+    marginVertical: 10,
     borderWidth: 1,
-    borderColor: '#aa8ee6', // Purple border
+    borderColor: '#ccc',
+    borderRadius: 5,
+    backgroundColor: '#fff', // Input background color
   },
-  sectionTitle: {
-    fontSize: 20,
-    marginBottom: 10,
-    color: '#aa8ee6', // Purple color for section titles
+  footer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    position: 'absolute',
+    bottom: 20,
   },
-  sectionContent: {
-    fontSize: 18,
-    color: '#aa8ee6', // Slightly darker purple for content
+  subjectMarks: {
+    marginLeft: 10,
+    color: '#fff', // Text color
   },
 });

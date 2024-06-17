@@ -1,62 +1,51 @@
-// import axios from 'axios';
-
-
-
-// const api = axios.create({
-//   baseURL: 'http://your_server_ip:5000/api',
-// });
-
-// export const register = async (email, password) => {
-//   return await api.post('/users/register', { email, password });
-// };
-
-// export const login = async (email, password) => {
-//   return await api.post('/users/login', { email, password });
-// };
-
-// export const getGrades = async () => {
-//   return await api.get('/grades');
-// };
-
-// export const getAnnouncements = async () => {
-//   return await api.get('/announcements');
-// };
-
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: 'http://192.168.1.100:5000/api', // Use your local IP address
 });
 
-
-
-
-const fetchData = async () => {
+// User registration function
+export const register = async (email, password) => {
   try {
-    const response = await axios.get('https://jsonplaceholder.typicode.com/posts');
-    console.log(response.data);
+    const response = await api.post('/users/register', { email, password });
+    return response.data;
   } catch (error) {
-    console.error('There was an error making the request:', error);
+    console.error('Registration error:', error.response || error.message);
+    throw error;
   }
 };
 
-fetchData();
-
-
-export const register = async (email, password) => {
-  return await api.post('/users/register', { email, password });
-};
-
+// User login function
 export const login = async (email, password) => {
-  return await api.post('/users/login', { email, password });
+  try {
+    const response = await api.post('/users/login', { email, password });
+    return response.data;
+  } catch (error) {
+    console.error('Login error:', error.response || error.message);
+    throw error;
+  }
 };
 
+// Fetch grades function
 export const getGrades = async () => {
-  return await api.get('/grades');
+  try {
+    const response = await api.get('/grades');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching grades:', error.response || error.message);
+    throw error;
+  }
 };
 
+// Fetch announcements function
 export const getAnnouncements = async () => {
-  return await api.get('/announcements');
+  try {
+    const response = await api.get('/announcements');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching announcements:', error.response || error.message);
+    throw error;
+  }
 };
 
 export default api;
