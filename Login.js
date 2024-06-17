@@ -29,7 +29,6 @@ export default function Login() {
       Alert.alert('Notice', 'Login Failed!', [{ text: 'Close' }]);
     }
   };
-  
 
   return (
     <View style={styles.container}>
@@ -50,11 +49,10 @@ export default function Login() {
         secureTextEntry
         autoCapitalize="none"
       />
-     <Button
-  title="Login"
-  onPress={() => navigation.navigate('Main')}
-/>
-
+      <Button
+        title="Login"
+        onPress={handleLogin}
+      />
     </View>
   );
 }
@@ -62,7 +60,7 @@ export default function Login() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#462cb0', // Changed background color
     alignItems: 'center',
     justifyContent: 'center',
     padding: 16,
@@ -70,6 +68,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     marginBottom: 20,
+    color: '#fff', // Changed text color to white
   },
   input: {
     width: '100%',
@@ -78,5 +77,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 5,
+    backgroundColor: '#fff', // Changed input background color to white
   },
 });
