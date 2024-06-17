@@ -6,7 +6,7 @@ const User = require(path.join(__dirname, '../models/User'));
 
 const router = express.Router();
 
-// Register User
+
 router.post('/register', async (req, res) => {
   const { email, password } = req.body;
   try {
